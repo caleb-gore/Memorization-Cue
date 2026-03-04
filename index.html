@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memorization Cue Formatter</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <section class="panel">
+      <div class="heading">
+        <p class="eyebrow">Formatter</p>
+        <h1>Memorization Cue</h1>
+        <p class="description">Paste text on the left. The cue script updates immediately on the right.</p>
+      </div>
+
+      <div class="controls">
+        <label class="field control-field" for="modeSelect">
+          <span>Mode</span>
+          <select id="modeSelect">
+            <option value="memorization">Memorization Cue</option>
+            <option value="script">Script Cue</option>
+          </select>
+        </label>
+
+        <label class="field control-field is-hidden" for="characterSelect" id="characterField">
+          <span>Character</span>
+          <select id="characterSelect" disabled>
+            <option value="">Choose a character</option>
+          </select>
+        </label>
+
+        <label class="toggle" for="markSpecialTokens">
+          <input id="markSpecialTokens" type="checkbox" checked>
+          <span>Shorten acronyms and numbers with <code>*</code></span>
+        </label>
+      </div>
+
+      <div class="actions">
+        <button id="convertButton" type="button">Convert Text</button>
+        <button id="editButton" type="button" class="secondary is-hidden">Edit Source</button>
+      </div>
+
+      <div class="view-tabs is-hidden" id="viewTabs">
+        <button id="outputTabButton" type="button" class="tab-button is-active">Formatted Output</button>
+        <button id="studyTabButton" type="button" class="tab-button">Flashcards</button>
+      </div>
+
+      <div class="workspace">
+        <label class="field" id="sourceField">
+          <span>Source Text</span>
+          <textarea id="sourceText" placeholder="Paste or type text here..."></textarea>
+        </label>
+
+        <section class="field output-field" id="outputField">
+          <span>Formatted Output</span>
+          <div id="formattedText" class="output-panel" aria-live="polite">
+            <p class="output-placeholder">Converted text will appear here.</p>
+          </div>
+        </section>
+      </div>
+
+      <section class="study-panel is-hidden" id="studyPanel">
+        <div class="study-header">
+          <div>
+            <p class="eyebrow">Study</p>
+            <h2>Flashcards</h2>
+          </div>
+
+          <div class="study-controls">
+            <label class="field control-field" for="studyModeSelect">
+              <span>Study Mode</span>
+              <select id="studyModeSelect">
+                <option value="cue">Cue Recall</option>
+                <option value="context">Context to Line</option>
+              </select>
+            </label>
+
+            <label class="toggle" for="shuffleCards">
+              <input id="shuffleCards" type="checkbox">
+              <span>Shuffle deck</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="study-intro" id="studyIntro">
+          <button id="startSessionButton" type="button">Start Session</button>
+        </div>
+
+        <div class="study-card is-hidden" id="studyCard">
+          <p class="study-progress" id="studyProgress">No cards available</p>
+          <div class="study-face">
+            <p class="study-label" id="cardFrontLabel">Prompt</p>
+            <div class="study-text" id="cardFrontText">Select a character and convert a script to build flashcards.</div>
+          </div>
+          <div class="study-face is-hidden" id="cardBackFace">
+            <p class="study-label" id="cardBackLabel">Answer</p>
+            <div class="study-text" id="cardBackText"></div>
+          </div>
+        </div>
+
+        <div class="study-actions is-hidden" id="studyActions">
+          <button id="revealCardButton" type="button">Reveal Answer</button>
+          <button id="correctCardButton" type="button" class="success">I Knew It</button>
+          <button id="incorrectCardButton" type="button" class="danger">I Didn't Know It</button>
+          <button id="endSessionButton" type="button" class="secondary">End Session</button>
+        </div>
+
+        <section class="study-stats is-hidden" id="studyStats">
+          <div class="study-summary" id="studySummary">Start a session to track results.</div>
+          <div class="study-trouble">
+            <h3>Most Trouble</h3>
+            <div id="troubleLines" class="trouble-lines">No study data yet.</div>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
