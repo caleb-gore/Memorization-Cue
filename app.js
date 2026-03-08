@@ -173,6 +173,14 @@ function isDigit(character) {
   return /\p{N}/u.test(character);
 }
 
+function isApostrophe(character) {
+  return /['\u2019\u2018\u02BC\uFF07]/u.test(character);
+}
+
+function normalizeApostrophes(text) {
+  return text.replace(/[\u2019\u2018\u02BC\uFF07]/gu, "'");
+}
+
 function isAllCapsWord(word) {
   const letters = Array.from(word).filter(isLetter);
   return letters.length > 1 && letters.every(isUppercaseLetter);
@@ -216,8 +224,8 @@ function cueInlineText(input, options = { markSpecialTokens: false }) {
       continue;
     }
 
-    if ((character === "'" || character === "-") && buffer) {
-      buffer += character;
+    if ((isApostrophe(character) || character === "-") && buffer) {
+      buffer += isApostrophe(character) ? "'" : character;
       continue;
     }
 
@@ -334,6 +342,7 @@ function formatCueParagraph(text, options) {
 }
 
 function transformWord(word, options) {
+  const normalizedWord = normalizeApostrophes(word);
   const firstLetter = Array.from(word).find(isLetter);
   const firstCharacter = Array.from(word)[0];
   const isAcronym = isAllCapsWord(word);
@@ -349,8 +358,8 @@ function transformWord(word, options) {
     }
   }
 
-  if (word.includes("-")) {
-    return word
+  if (normalizedWord.includes("-")) {
+    return normalizedWord
       .split("-")
       .map((part) => transformWord(part, options))
       .filter(Boolean)
@@ -365,7 +374,7 @@ function transformWord(word, options) {
     return "";
   }
 
-  if (word.includes("'")) {
+  if (normalizedWord.includes("'")) {
     return `${firstLetter}'`;
   }
 
@@ -586,7 +595,8 @@ function buildContextContent(units, currentIndex, depth = 1) {
 }
 
 function countWords(text) {
-  const matches = text.match(/\b[\p{L}\p{N}']+\b/gu);
+  const normalizedText = normalizeApostrophes(text);
+  const matches = normalizedText.match(/\b[\p{L}\p{N}']+\b/gu);
   return matches ? matches.length : 0;
 }
 
